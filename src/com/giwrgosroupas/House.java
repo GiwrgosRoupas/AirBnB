@@ -1,16 +1,15 @@
 package com.giwrgosroupas;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 import static java.lang.String.valueOf;
 
 public class House {
     Scanner input = new Scanner(System.in);
-    private ArrayList<String> houseInfo = new ArrayList<>();
-    private static HashMap<Integer, ArrayList<ArrayList<String>>> housesOwned = new HashMap<>();
-
+    public  String[] houseInfo = new String[21];
+    public static ArrayList<String[]> housesList= new ArrayList<>();       //contains houses housesList<houseInfo[]>
+    private static HashMap<Integer, ArrayList<String[]>> housesOwned = new HashMap<>(); //contains list of house, key is taxNumber
+    //houseInfo
     //0-Municipality
     //1-House ID
     //2-TaxNumber
@@ -25,101 +24,135 @@ public class House {
     //11-View
     //12-Distance from metro    float >
     //13-Daily cost     float >
-    //14-Garden     float =
-    //15-Pool   float =
-    //16-BBQ    boolean
-    //17-floor  int =
-    //18-Elevator   boolean
-    //19-Balcony    boolean
+    //14-IsApartment    "Dedicated House"-"Apartment"
+    //15-Garden     float =
+    //16-Pool   float =
+    //17-BBQ    boolean
+    //18-floor  int =
+    //19-Elevator   boolean
+    //20-Balcony    boolean
     private String taxNumber;
+
     private int roomsNumber;
     private int peopleCanAccomodate;
 
 
     House(int taxNumber) {
         setMunicipality();
-        setHouseID();
         this.taxNumber= valueOf(taxNumber);
-        houseInfo.add(2, valueOf(taxNumber));
+        houseInfo[2]=valueOf(taxNumber);
+        setHouseID();
         setAddress();
-        System.out.println("Number of rooms:");
+        System.out.print("Number of rooms: ");
         roomsNumber=setIntegers(4);
-        System.out.println("People that can be accommodated:");
+        System.out.print("People that can be accommodated: ");
         peopleCanAccomodate=setIntegers(5);
         float levelOfComfort=(float) peopleCanAccomodate/roomsNumber;
-        houseInfo.add(6, String.valueOf(levelOfComfort));
-        System.out.println("Is Internet included? :");
+        houseInfo[6]=String.valueOf(levelOfComfort);
+        System.out.print("Is Internet included? ");
         setBooleans(7);
-        System.out.println("Is a TV included? :");
+        System.out.print("Is a TV included? ");
         setBooleans(8);
-        System.out.println("Is a kitchen included? :");
+        System.out.print("Is a kitchen included? ");
         setBooleans(9);
-        System.out.println("Is parking spot included? :");
+        System.out.print("Is parking spot included? ");
         setBooleans(10);
         setView();
-        System.out.println("Distance from nearest metro station:");
+        System.out.print("Distance from nearest metro station: ");
         setFloats(12);
-        System.out.println("Daily cost:");
+        System.out.print("Daily cost: ");
         setFloats(13);
         apartmentOrNotInput();
-        System.out.println(houseInfo.toString());
+        housesList.add(houseInfo);
+//        housesOwned.put(taxNumber,housesList);
+//        String[] houseInfoSecond={"1","2","3","1","2","3","1","2","3","1","2","3","1","2","3","1","2","3","1","2","3"};
+//        housesList.add(houseInfoSecond);
+//        housesOwned.put(taxNumber,housesList);
 
-
-
+//        String test=housesOwned.get(taxNumber).get(1)[1];
+        ArrayList<String[]> tempList = new ArrayList<String[]>();
+        for (String[] array: housesList ){      //isws na mporei na diavazei mono to teleutaio, afou kathe fora pernaei apo edw
+            if (array[2].equals(String.valueOf(taxNumber)))
+                tempList.add(array);
+            housesOwned.put(taxNumber,tempList);
+        }
+        allHousesPrinter();
     }
 
     private void setMunicipality() {
         String municipality="";
-        System.out.println("Municipality: ");
-        while (!(municipality = input.nextLine()).matches("[A-Za-z '.]{2,50}"))
+        System.out.print("Municipality: ");
+        while (!(municipality = input.nextLine()).matches("[A-Z][A-Za-z '.]{2,50}"))
             System.out.println("Municipality must be 2-50 letters, can also contain special characters .' .");
-        houseInfo.add(0, municipality);
+        houseInfo[0]= municipality;
     }
 
     private void setHouseID() {
-        String municipality = houseInfo.get(0).toUpperCase();
+        String municipality = houseInfo[0].toUpperCase();
         String id = municipality.charAt(0) + "" + municipality.charAt(1) ;
-        System.out.println("How many houses have you already inserted in the app?");
-        String numberOfHouses;
-        while (!(numberOfHouses = input.nextLine()).matches("([1-9][0-9]{0,2})|[0]")) {
-            System.out.println("Provide a number 0-999!");
-        }
-        byte numberOfHousesByte = (byte) (Byte.parseByte(numberOfHouses) + 1);
-        if (numberOfHouses.length() == 1)
-            id = id + "000" + valueOf(numberOfHousesByte);
-        else if (numberOfHouses.length() == 2)
-            id = id + "00" + valueOf(numberOfHousesByte);
-        else if (numberOfHouses.length() == 3)
-            id = id + "0" + valueOf(numberOfHousesByte);
+        byte counter=-1;
 
-        houseInfo.add(1, id);
+        if (!housesList.isEmpty()){
+            for(int i=0; i<housesList.size();i++){
+                if(id.equals(housesList.get(i)[0].substring(0,2).toUpperCase()))
+                    counter++;
+            }
+        }
+        counter++;
+        if (valueOf(counter).length() == 1)
+            id = id + "000" + counter;
+        else if (valueOf(counter).length() == 2)
+            id = id + "00" + counter;
+        else if (valueOf(counter).length() == 3)
+            id = id + "0" + counter;
+        else
+            id = id + counter;
+        houseInfo[1]=id;
     }
 
     private void setAddress(){  //Address can have more than 1 word, also number like 1-3
         String address="";
-        System.out.println("Address:");
-        while(!(address=input.nextLine().trim()).matches("[A-Za-z]{2,30}[ ][0-9]{1,3}"))
-            System.out.println("Address must be of format {Letters Number} (2-30 letters,1-3 numbers)");
-        houseInfo.add(3,address);
+        System.out.print("House address:");
+        while(!(address=input.nextLine().trim()).matches("([A-Z][a-z.([-][A-Z])?]{1,30}[ ])[0-9]{1,3}"))
+            System.out.println("Each word must start with capital letter, have length 2-31 letters, special characters (. -).\nA whitespace is required before numbers.");
+        houseInfo[3]=address;
     }
 
 
+    private int setIntegers(int choice) {   //maybe can be done with generics
+        int num = 0;
+        boolean correct = false;
+        do {
+            try {
+                do {
+                    switch (choice) {
+                        case 4, 5:
+                            correct = (num = Integer.parseInt(input.nextLine())) > 0;
+                            if (correct) break;
+                            System.out.println("Provide positive number!");
+                            break;
+                        case 18:
+                            correct = (num = Integer.parseInt(input.nextLine())) >= 0;
+                            if (correct) break;
+                            System.out.println("Provide a number greater or equal than zero!");
+                            break;
+                    }
+                } while (!correct);
+            } catch (NumberFormatException nfe) {
+                System.out.println("You didnt provide a number");
+            }
+        } while (!correct);
 
-    private int setIntegers(int choice) {
-        String num;
-        while (!(num = input.nextLine().trim()).matches("[0-9]{1,}"))
-            System.out.println("Provide a number!");
-        houseInfo.add(choice, num);
-    return Integer.parseInt(num);
-}
+        houseInfo[choice]= valueOf(num);
+        return num;
+    }
 
 
     private void setBooleans(int choice){
         String bool;
-        String menu="Type Y for yes and N for no!";
         while(!(bool=input.nextLine().trim().toUpperCase()).matches("[YN]"))
-            System.out.println(menu);
-        houseInfo.add(choice,bool);
+            System.out.println("Type Y for yes and N for no!");
+        houseInfo[choice]=bool;
     }
 
     private void setView(){
@@ -134,7 +167,7 @@ public class House {
         while(!(view=input.nextLine().trim()).matches("[123]"))
             System.out.println(menu);
 
-        houseInfo.add(11, view);
+        houseInfo[11]=view;
     }
 
     private void setFloats(int choice){   //maybe can be done with generics
@@ -149,21 +182,19 @@ public class House {
                             if (correct) break;
                             System.out.println("Provide positive number!");
                             break;
-                        case 14,15:
+                        case 15,16:
                             correct= (num = Float.parseFloat(input.nextLine())) >= 0;
                             if (correct) break;
                             System.out.println("Provide a number greater or equal than zero!");
                             break;
                     }
-                    if (correct) break;
-                }while(true);
+                }while(!correct);
             } catch (NumberFormatException nfe) {
                 System.out.println("You didnt provide a number");
             }
-            if(correct) break;
-        }while(true);
+        }while(!correct);
 
-        houseInfo.add(choice,String.valueOf(num));
+        houseInfo[choice]=String.valueOf(num);
     }
 
     private void apartmentOrNotInput(){
@@ -172,21 +203,41 @@ public class House {
         while(!(answer = input.nextLine().trim().toUpperCase()).matches("[YN]"))
             System.out.println("Press Y for yes, N for no!");
         if (answer.equals("N")){
+            houseInfo[14]="Dedicated House";
             System.out.println("Garden size in square meters (enter 0 if not included):");
-            setFloats(14);
-            System.out.println("Pool size in square meters (enter 0 if not included):");
             setFloats(15);
+            System.out.println("Pool size in square meters (enter 0 if not included):");
+            setFloats(16);
             System.out.println("Is BBQ included:");
-            setBooleans(16);
+            setBooleans(17);
         }else{
+            houseInfo[14]="Apartment";
             System.out.println("Floor:");
-            setIntegers(17);
+            setIntegers(18);
             System.out.println("Is elevator included?");
-            setBooleans(18);
-            System.out.println("Is balcony included");
             setBooleans(19);
+            System.out.println("Is balcony included");
+            setBooleans(20);
 
         }
     }
-}
+
+    public void housesOwnedPrinter(int taxNumber){
+            for (int i=0;i<housesOwned.get(taxNumber).size();i++){
+                for (int j=0;j<21;j++){
+                    System.out.print(housesOwned.get(taxNumber).get(i)[j] +"||");
+                }
+                System.out.println();
+            }
+        }
+    public  void allHousesPrinter(){
+        for (String[] house : housesList){
+            for(String elem : house)
+                System.out.print(elem + "\t| ");
+            System.out.println();
+        }
+    }
+
+    }
+
 

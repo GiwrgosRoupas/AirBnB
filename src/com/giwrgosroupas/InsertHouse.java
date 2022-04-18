@@ -1,25 +1,23 @@
 package com.giwrgosroupas;
 
-import java.util.HashMap;
+
 
 public class InsertHouse {
 
-    boolean userNotExists;
+
     int taxNumber;
     InsertHouse(){
         var user=new User();
         taxNumber=user.setTaxNumber();
-        userNotExists =user.userNotExists(taxNumber);
-        if (!userNotExists)
+        if (!(user.userExists(taxNumber)))
                 user.createUser();
-
         insertHouse();
     }
 
     private void insertHouse(){
         System.out.println("Provide the following info to insert a house.");
         House house=new House(taxNumber);
-
+        System.out.println("House with ID #"+house.houseInfo[1]+" inserted. Owner info:"+User.userInfo[0]+", "+ taxNumber);
     }
 
 

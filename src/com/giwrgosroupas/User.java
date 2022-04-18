@@ -2,17 +2,16 @@ package com.giwrgosroupas;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class User {
     private int taxNumber;
     Scanner input = new Scanner(System.in);
-     // TaxNumber, 0 Name, 1 ID, 2 Adress, 3 E-mail
 
-    private String[] userArray= new String[4];
-    private static HashMap<Integer, String[]> userMap = new HashMap<>();
+    // TaxNumber, 0 Name, 1 ID, 2 Adress, 3 E-mail
+    public static  String[] userInfo = new String[4];
+    public static HashMap<Integer, String[]> userMap = new HashMap<>();
 
 
 
@@ -35,39 +34,36 @@ public class User {
             } else
                 System.out.println("Tax number must be 9 numbers.");
         } while (true);
-        if (!userMap.containsKey(taxNumber))
-            userMap.put(taxNumber, null);
-        System.out.println(userMap);
 
         return taxNumber;
     }
 
-    public boolean userNotExists(int taxNumber){
+    public boolean userExists(int taxNumber){
         if (userMap.containsKey(taxNumber))
-            return false;
-        return true;
+            return true;
+        return false;
     }
 
     public void createUser() {
         System.out.println("User not found, enter your info below:");
         System.out.println("First and last name: ");
         createUserNameValidation();
-        System.out.println("Adress: ");
+        System.out.println("Your adress: ");
         createUserAddressValidation();
         System.out.println("ID number");
         createUserIdValidation();
         System.out.println("Email:");
         createUserEmailValidation();
+        userMap.put(taxNumber, userInfo);
     }
 
     private void createUserNameValidation(){
         String name= input.nextLine().trim();
-        while(!name.matches("([A-Za-z-']{2,30}[ ]?){2,}")){        //regex for greek names [A-Za-z]{2,30}[ ][A-Za-z]{2,30}
-            System.out.println("Each word can be 2-30 characters long and contain letters (A-Z,a-z) and characters (', -) only! Try again.");
+        while(!name.matches("\\b([A-Z][-a-z. ']+[ ]*){2,}")){        //regex for greek names [A-Za-z]{2,30}[ ][A-Za-z]{2,30}
+            System.out.println("Each must start with capital letter and contain letters (A-Z,a-z) and characters (' . -) only! Try again.");
             name=input.nextLine().trim();
         }
-        userArray[0]= name;
-        userMap.put(taxNumber, userArray);
+        userInfo[0]= name;
     }
 
     private void createUserIdValidation() {
@@ -76,18 +72,16 @@ public class User {
             System.out.println("ID must be of format LLNNNNNN (L=Capital letter, N=Number)");
             id=input.nextLine().trim();
         }
-        userArray[1]= id;
-        userMap.put(taxNumber, userArray);
+        userInfo[1]= id;
     }
 
     private void createUserAddressValidation(){
         String address= input.nextLine().trim();
-        while(!address.matches("[A-Za-z]{2,30}[ ][0-9]{1,3}")){
-            System.out.println("Address must be of format {Letters Number} (2-30 letters,1-3 numbers)");
+        while(!address.matches("([A-Z][a-z.([-][A-Z])?]{1,30}[ ])[0-9]{1,3}")){
+            System.out.println("Each word must start with capital letter, have length 2-31 letters, special characters (. -).\nA whitespace is required before numbers.");
             address=input.nextLine().trim();
         }
-        userArray[2]= address;
-        userMap.put(taxNumber, userArray);
+        userInfo[2]= address;
     }
 
     private void createUserEmailValidation() {
@@ -127,8 +121,6 @@ public class User {
             System.out.println("Email:");
         }while (true);
 
-        userArray[3]= email;
-        userMap.put(taxNumber, userArray);
-
+        userInfo[3]= email;
     }
 }

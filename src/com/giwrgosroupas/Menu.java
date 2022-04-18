@@ -18,15 +18,17 @@ public class Menu {
     }
 
     private void mainMenu() {
-        System.out.println("Press:");
-        System.out.println("\t1. To insert house");
-        System.out.println("\t2. To make reservation");
-        System.out.println("\t3. To change or cancel reservation");
-        System.out.println("\t4. Show Logs");
-        System.out.println("\t5. Exit");
-        byte choice=mainMenuInputValidation();
-        mainMenuChoiceRedirect(choice);
-
+        byte choice;
+        do {
+            System.out.println("Press:");
+            System.out.println("\t1. To insert house");
+            System.out.println("\t2. To make reservation");
+            System.out.println("\t3. To change or cancel reservation");
+            System.out.println("\t4. Show Logs");
+            System.out.println("\t5. Exit");
+            choice = mainMenuInputValidation();
+            mainMenuChoiceRedirect(choice);
+        }while(choice!=5);
     }
 
 
@@ -50,6 +52,9 @@ public class Menu {
         switch(choice) {
             case 1:
                 new InsertHouse();
+                break;
+            case 5:
+                exit(0);
         }
     }
 
