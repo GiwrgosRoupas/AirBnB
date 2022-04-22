@@ -1,12 +1,13 @@
 package it21988;
 
 
+import it21988.User.Owner;
 import it21988.User.User;
 
 import java.util.Scanner;
 
 import static it21988.House.housesList;
-import static it21988.User.UserValidation.*;
+import static it21988.User.User.*;
 import static java.lang.String.valueOf;
 
 public class InsertHouse {
@@ -15,10 +16,19 @@ public class InsertHouse {
     int taxNumber;
     InsertHouse(){
         taxNumber= inputTaxNumber();
-        if(!userExists(taxNumber)){
-            createUser(taxNumber, true);
+        if(!Owner.ownerExists(taxNumber)) {
+            if(userExists(taxNumber)) {
+                System.out.print("Account already exists as Renter, to get Owner access provide ");
+                Owner.createOwnerRenterExists(taxNumber);
+            }
+        }else {
+            System.out.println("Provide the following info to register as Owner.");
+            Owner.createOwner(taxNumber);
         }
+
+
         createHouse();
+        input.close();
     }
 
     private void createHouse(){
@@ -47,11 +57,11 @@ public class InsertHouse {
                 isApartment.equals("No")? inputFloat(14) : -1,
                 isApartment.equals("No")? inputFloat(15) : -1,
                 isApartment.equals("No") ? inputBoolean(16) : null,
-                isApartment.equals("Yes")? inputBytes(17) : 0,
+                isApartment.equals("Yes")? inputBytes(17) : -5,
                 isApartment.equals("Yes")? inputBoolean(18) : null,
                 isApartment.equals("Yes")? inputBoolean(19) : null
         ));
-        System.out.println("House with ID #"+id+" inserted. Owner info: "+ User.usersMap.get(taxNumber).name()+", "+ taxNumber +".");
+        System.out.println("House with ID #"+id+" inserted. Owner info: "+ User.usersMap.get(taxNumber)[0]+", "+ taxNumber +".");
     }
 
     private String inputMunicipality() {

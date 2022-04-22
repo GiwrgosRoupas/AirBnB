@@ -40,6 +40,7 @@ public class Menu {
     private void mainMenuChoiceRedirect(byte choice){
         switch (choice) {
             case 1 -> new InsertHouse();
+            case 4 -> new Log();
             case 5 -> exit(0);
         }
     }
