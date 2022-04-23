@@ -7,6 +7,7 @@ import it21988.User.User;
 import java.util.Scanner;
 
 import static it21988.House.housesList;
+import static it21988.User.Owner.createOwner;
 import static it21988.User.User.*;
 import static java.lang.String.valueOf;
 
@@ -16,14 +17,14 @@ public class InsertHouse {
     int taxNumber;
     InsertHouse(){
         taxNumber= inputTaxNumber();
-        if(!Owner.ownerExists(taxNumber)) {
-            if(userExists(taxNumber)) {
+        if(userExists(taxNumber)) {
+            if (!Owner.ownerExists(taxNumber)) {
                 System.out.print("Account already exists as Renter, to get Owner access provide ");
                 Owner.createOwnerRenterExists(taxNumber);
             }
-        }else {
+        } else {
             System.out.println("Provide the following info to register as Owner.");
-            Owner.createOwner(taxNumber);
+            createOwner(taxNumber);
         }
 
 
@@ -52,10 +53,10 @@ public class InsertHouse {
                 inputBoolean(9),
                 inputBoolean(10),
                 inputView(),
-                inputFloat(12),
-                inputFloat(13),
-                isApartment.equals("No")? inputFloat(14) : -1,
-                isApartment.equals("No")? inputFloat(15) : -1,
+                (int) inputInt(12),
+                inputInt(13),
+                isApartment.equals("No")? inputInt(14) : -1,
+                isApartment.equals("No")? inputInt(15) : -1,
                 isApartment.equals("No") ? inputBoolean(16) : null,
                 isApartment.equals("Yes")? inputBytes(17) : -5,
                 isApartment.equals("Yes")? inputBoolean(18) : null,
@@ -166,8 +167,8 @@ public class InsertHouse {
         return num;
     }
 
-    private float inputFloat(int attribute){   //maybe can be done with generics
-        float num=0;
+    private int inputInt(int attribute){   //maybe can be done with generics
+        int num=0;
         boolean correct =false;
         do {
             try {
@@ -176,14 +177,14 @@ public class InsertHouse {
                         case 12, 13 -> {
                             System.out.print(attribute ==12 ?"Distance from nearest metro station: ":
                                     "Daily cost: ");
-                            correct = (num = Float.parseFloat(input.nextLine())) > 0;
+                            correct = (num = Integer.parseInt(input.nextLine())) > 0;
                             if (correct) break;
                             System.out.println("Provide positive number!");
                         }
                         case 14, 15 -> {
                             System.out.print(attribute ==14 ? "Garden size in square meters (enter 0 if not included): "
                                     :"Pool size in square meters (enter 0 if not included): ");
-                            correct = (num = Float.parseFloat(input.nextLine())) >= 0;
+                            correct = (num = Integer.parseInt(input.nextLine())) >= 0;
                             if (correct) break;
                             System.out.println("Provide a number greater or equal than zero!");
                         }

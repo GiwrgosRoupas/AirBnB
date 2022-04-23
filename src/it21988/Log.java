@@ -1,7 +1,14 @@
 package it21988;
 
-import java.util.Locale;
+import it21988.User.User;
+
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static it21988.House.housesList;
+import static it21988.House.printHouse;
+
+//CHANGE THE PROMPT TO GO BACK WITH 3 NOT X, null string bug
 //provide returns
 //provide finish, dont go to main userMenuChoice but previous userMenuChoice
 //provide clear term
@@ -11,24 +18,26 @@ import java.util.Scanner;
 //if no house/reservation found provide appropriate message
 public class Log {
     Scanner input =new Scanner(System.in);
+    int taxNumber;
     Log(){
+        taxNumber= User.inputTaxNumber();
         char choice='0';
         do {
             choice= userMenuChoice(1 ); /*Log Menu*/
             if(choice=='1'){
-                choice=userMenuChoice(2);  /*Owner Menu*/
-                if (choice==1){
-                    ownerShowHouses();
-                }else if(choice==2){
-                    ownerShowRentedTime();
-                }
+                do {
+                    choice = userMenuChoice(2);  /*Owner Menu*/
+                    if (choice == '1')
+                        ownerShowHouses();
+                    else if (choice == '2')
+                        ownerShowRentedTime();
+                }while (choice!='X');
             }else if (choice=='2'){
-                choice=userMenuChoice(3);  /*Renter Menu*/
-                if (choice==1){
-                    renterShowReservations();
-                }
+                  /*Renter Menu*/
+                renterShowReservations();
             }
         }while (choice!='X');
+
     }
 
 
@@ -44,11 +53,7 @@ public class Log {
             menuPrompt(menuNum);
             if (choice.length() == 1) {
                 choiceChar = input.nextLine().trim().toUpperCase().charAt(0);
-                if(menuNum==1 || menuNum==2) {
-                    correct = choiceChar == '1' || choiceChar == '2' || choiceChar == 'X';
-                }else if (menuNum == 3) {
-                    correct = choiceChar == '1' || choiceChar == 'X';
-                }
+                correct = choiceChar == '1' || choiceChar == '2' || choiceChar == 'X';
             } else {
                 System.out.println("Too many characters!");
             }
@@ -70,18 +75,29 @@ public class Log {
                            2. See rented time for a house
                            X. Previous Menu
                        """);
-            case 3 ->System.out.println("""
-                       Select:
-                           1. Your reservations list
-                           X. Previous Menu
-                       """);
-            default -> {System.out.println("Wrong menuNum, check Log class!");
-                System.exit(-1);}
         }
     }
 
-    private void ownerShowHouses(){};
-    private void ownerShowRentedTime(){};
+    private void ownerShowHouses(){
+        int counter=0;
+        for (House house : housesList){
+            if (house.taxNumber()==taxNumber) {
+                House.printHouse(house);
+                counter++;
+            }
+        }
+        if (counter==0) {System.out.println("No houses found.");}
+    };
+    private void ownerShowRentedTime(){
+//        String answer;
+//        do {
+//        System.out.println("Type a house ID or press enter to see all houses.");
+//        System.out.print("House ID: #");
+//        answer=input.nextLine();
+//        if(answer.toUpperCase().trim().matches("[[A-Z]{2}[0-9]{4}")){
+//
+//        }
+        };
 
     private void renterShowReservations(){};
 

@@ -1,12 +1,19 @@
 package it21988.User;
 
+import it21988.House;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import static it21988.User.User.usersMap;
 
 public class Owner extends User{
 
+    public static Map<Integer, ArrayList<House>> housesOwned=new HashMap<>();
     public static boolean ownerExists(int taxNumber){
         if (userExists(taxNumber))
-            return !usersMap.get(taxNumber)[2].equals("null");
+            return !usersMap.get(taxNumber)[2].equals("-");
         return false;
     }
 

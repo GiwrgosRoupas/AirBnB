@@ -6,7 +6,7 @@ public class Renter extends User {
 
     public static boolean renterExists(int taxNumber){
         if (userExists(taxNumber))
-            return !usersMap.get(taxNumber)[3].equals(null);
+            return !usersMap.get(taxNumber)[3].equals("-");
         return false;
     }
 

@@ -1,6 +1,7 @@
 package it21988;
 
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,23 +18,35 @@ public record House(String municipality,
                     String hasKitchen,
                     String hasParking,
                     String view,
-                    float distanceFromMetro,
-                    float dailyCost,
-                    float garden,
-                    float pool,
+                    int distanceFromMetro,
+                    int dailyCost,
+                    int garden,       //if garden=-5 means house is apartment
+                    int pool,
                     String hasBBQ,
-                    byte floor,
+                    byte floor,     //if floor=-5 means house is dedicated
                     String hasElevator,
                     String hasBalcony) {
 
     public static List<House> housesList = new ArrayList<>();
 
-    public void printHouse(House house){            //comf  cost                   dfm
-        System.out.printf("House ID | Municipality | Adress | Rooms | People | Comfort | Internet | TV | Kitchen | Parking | View | Nearest Metro | Cost | Garden | Pool | BBQ | Floor | Elevator | Balcony");
-        System.out.printf("#-8%s | %-20s | %-20s | %-3d | %-3d | %-3f | %-4s | %-4s | %-4s | %-4s | %-6s | %-4f | %-4f | %-3f | %-3f | %-4s | %-3f| %-4s | %-4s"
-                        ,
-                house.houseID, house.municipality, house.address, house.roomsNumber, house.pplNumber,
-                house.comfortLevel, house.dailyCost, house.hasInternet, house.hasTV, house.hasKitchen, house.hasParking,
-        house.view, house.distanceFromMetro, house.garden, house.pool, house.hasBBQ, house.floor, house.hasElevator, house.hasBalcony);
+    public static void printHouse(@NotNull House house){
+        if (house.floor==-5){
+            String type="Dedicated";
+            System.out.printf("House ID | Municipality   | Adress                | Rooms | People | Comfort | Daily Cost | Internet | TV    | Kitchen | Parking | View     | Nearest Metro  | Garden | Pool | BBQ   | Type%n");
+            System.out.printf("#%s  | %-14s | %-21s | %-5d | %-6d | %-7.2f | %-10d | %-8s | %-3s   | %-7s | %-7s | %-8s | %-14d | %-6d | %-3d  | %-5s | %s%n",
+                    house.houseID, house.municipality, house.address, house.roomsNumber, house.pplNumber,
+                    house.comfortLevel, house.dailyCost, house.hasInternet, house.hasTV, house.hasKitchen, house.hasParking,
+                    house.view, house.distanceFromMetro, house.garden, house.pool, house.hasBBQ, type);
+            System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+        }else {
+            String type="Apartment";
+            System.out.printf("House ID | Municipality   | Adress                | Rooms | People | Comfort | Daily Cost | Internet | TV    | Kitchen | Parking | View     | Nearest Metro  | Floor  | Elevator | Balcony | Type%n");
+            System.out.printf("#%s  | %-14s | %-21s | %-5d | %-6d | %-7.2f | %-10d | %-8s | %-3s   | %-7s | %-7s | %-8s | %-14d | %-6d | %-7s  | %-7s | %s%n",
+                    house.houseID, house.municipality, house.address, house.roomsNumber, house.pplNumber,
+                    house.comfortLevel, house.dailyCost, house.hasInternet, house.hasTV, house.hasKitchen, house.hasParking,
+                    house.view, house.distanceFromMetro, house.floor, house.hasElevator, house.hasBalcony, type);
+            System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        }
     }
 }
