@@ -17,9 +17,10 @@ import static it21988.House.printHouse;
 //if they choose renterEnter and no owner found ask if they want to register with return to home
 //if no house/reservation found provide appropriate message
 public class Log {
-    Scanner input =new Scanner(System.in);
+    Scanner input;
     int taxNumber;
-    Log(){
+    Log(Scanner input){
+        this.input = input;
         taxNumber= User.inputTaxNumber();
         char choice='0';
         do {
@@ -87,7 +88,8 @@ public class Log {
             }
         }
         if (counter==0) {System.out.println("No houses found.");}
-    };
+    }
+
     private void ownerShowRentedTime(){
 //        String answer;
 //        do {
@@ -97,10 +99,9 @@ public class Log {
 //        if(answer.toUpperCase().trim().matches("[[A-Z]{2}[0-9]{4}")){
 //
 //        }
-        };
+        }
 
-    private void renterShowReservations(){};
-
+    private void renterShowReservations(){}
 
 
     //    Log(){

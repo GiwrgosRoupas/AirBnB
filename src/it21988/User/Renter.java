@@ -11,8 +11,8 @@ public class Renter extends User {
     }
 
     public static void createRenter(int taxNumber){
-        usersMap.put(taxNumber, new String[]{User.inputName(), User.inputIdNum(), null, User.inputEmail()});
-        System.out.println("Account created with Renter access.");;
+        usersMap.put(taxNumber, new String[]{User.inputName(), User.inputIdNum(), "-", User.inputEmail()});
+        System.out.println("Account created with Renter access.");
     }
 
     public static void createRenterOwnerExists(int taxNumber){

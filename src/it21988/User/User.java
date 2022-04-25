@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class User {
+public abstract  class User {
 
     public static Map<Integer, String[]> usersMap= new HashMap<>();
     //                  taxNumber  0-Name  1-ID  2-Address  3-Email
@@ -71,8 +71,8 @@ public class User {
     public static String inputAddress(){
         System.out.print("Address: ");
         String address= input.nextLine().trim();
-        while(!address.matches("([A-Z][a-z.([-][A-Z])?]{1,30}[ ])[0-9]{1,3}")){
-            System.out.println("Each word must start with capital letter, have length 2-31 letters, special characters (. -).\nA whitespace is required before numbers.");
+        while(!address.matches("([A-Z][a-z]{1,29}[-.]? ){1,3}[1-9]\\d{0,2}")){
+            System.out.println("Each word must start with capital letter, have length 2-30 letters, special characters (. -).\nA whitespace is required before numbers and after symbols.");
             System.out.print("Address: ");
             address=input.nextLine().trim();
         }

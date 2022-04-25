@@ -4,18 +4,21 @@ package it21988;
 import it21988.User.Owner;
 import it21988.User.User;
 
+import java.util.Collections;
 import java.util.Scanner;
 
 import static it21988.House.housesList;
+import static it21988.HouseCompare.getHouse;
 import static it21988.User.Owner.createOwner;
-import static it21988.User.User.*;
-import static java.lang.String.valueOf;
+import static it21988.User.User.inputTaxNumber;
+import static it21988.User.User.userExists;
 
 public class InsertHouse {
 
-    Scanner input = new Scanner(System.in);
+    Scanner input;
     int taxNumber;
-    InsertHouse(){
+    InsertHouse(Scanner input){
+        this.input=input;
         taxNumber= inputTaxNumber();
         if(userExists(taxNumber)) {
             if (!Owner.ownerExists(taxNumber)) {
@@ -29,7 +32,7 @@ public class InsertHouse {
 
 
         createHouse();
-        input.close();
+
     }
 
     private void createHouse(){
@@ -53,7 +56,7 @@ public class InsertHouse {
                 inputBoolean(9),
                 inputBoolean(10),
                 inputView(),
-                (int) inputInt(12),
+                inputInt(12),
                 inputInt(13),
                 isApartment.equals("No")? inputInt(14) : -1,
                 isApartment.equals("No")? inputInt(15) : -1,
@@ -66,10 +69,10 @@ public class InsertHouse {
     }
 
     private String inputMunicipality() {
-        String municipality;
         System.out.print("Municipality: ");
+        String municipality;
 
-        while (!(municipality = input.nextLine()).matches("[A-Z][A-Za-z '.]{2,50}")) {
+        while (!(municipality = input.nextLine()).trim().matches("[A-Z][A-Za-z '.]{2,50}")) {
             System.out.println("Municipality must be 2-50 letters, can also contain special characters .' .");
             System.out.print("Municipality: ");
         }
@@ -77,33 +80,22 @@ public class InsertHouse {
     }
 
     private String setHouseID(String municipality) {
-        String id = Character.toUpperCase(municipality.charAt(0)) + "" + Character.toUpperCase(municipality.charAt(1));
-        byte counter=-1;
+        String id = (municipality.charAt(0)+municipality.charAt(1)+"0000").toUpperCase();
+        int counter=0;
+        boolean correct=false;
 
-        if (!housesList.isEmpty()){
-            for (House house : housesList) {
-                if (id.equals(house.municipality().substring(0, 2).toUpperCase()))
-                    counter++;
-            }
-        }
+        int index=Collections.binarySearch(housesList, getHouse(id),new HouseCompare());
+        System.out.println(index);
 
-        counter++;
-        if (valueOf(counter).length() == 1)
-            id = id + "000" + counter;
-        else if (valueOf(counter).length() == 2)
-            id = id + "00" + counter;
-        else if (valueOf(counter).length() == 3)
-            id = id + "0" + counter;
-        else
-            id = id + counter;
 
-        return id;
+
+        return id+String.format("%04d",counter);
     }
 
     private String inputAddress(){  //Address can have more than 1 word, also number like 1-3
         String address;
         System.out.print("House address: ");
-        while(!(address=input.nextLine().trim()).matches("([A-Z][a-z.([-][A-Z])?]{1,30}[ ])[0-9]{1,3}")) {
+        while(!(address=input.nextLine().trim()).matches("([A-Z][a-z]{1,29}[-.]? ){1,3}[1-9]\\d{0,2}")) {
             System.out.println("Each word must start with capital letter, have length 2-31 letters, special characters (. -).\nA whitespace is required before numbers.");
             System.out.print("House address: ");
         }

@@ -4,9 +4,12 @@ import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-public record House(String municipality,
+
+
+public record House (String municipality,
                     String houseID,
                     int taxNumber,
                     String address,
@@ -37,7 +40,7 @@ public record House(String municipality,
                     house.houseID, house.municipality, house.address, house.roomsNumber, house.pplNumber,
                     house.comfortLevel, house.dailyCost, house.hasInternet, house.hasTV, house.hasKitchen, house.hasParking,
                     house.view, house.distanceFromMetro, house.garden, house.pool, house.hasBBQ, type);
-            System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
         }else {
             String type="Apartment";
@@ -49,4 +52,16 @@ public record House(String municipality,
             System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         }
     }
+
+}
+
+class HouseCompare implements Comparator<House>{
+    public int compare(House h1, House h2) {
+        return h1.houseID().equals(h2.houseID())?0:-1;
+    }
+    public static House getHouse(String id){
+        return new House("", id, 0,"", (byte) 0, (byte) 0, 0,"","","","", "",
+                0, 0, 0, 0, "", (byte) 0, "", "");
+    }
+
 }
