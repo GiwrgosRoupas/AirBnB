@@ -57,7 +57,7 @@ public record House (String municipality,
 
 class HouseCompare implements Comparator<House>{
     public int compare(House h1, House h2) {
-        return h1.houseID().equals(h2.houseID())?0:-1;
+        return h1.houseID().compareTo(h2.houseID());
     }
     public static House getHouse(String id){
         return new House("", id, 0,"", (byte) 0, (byte) 0, 0,"","","","", "",

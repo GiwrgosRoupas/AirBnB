@@ -24,7 +24,6 @@ public class it21988 {
             for (House house :housesList){
                     System.out.println(count +"\t"+house.houseID());
                     count++;
-
             }
         }
 

@@ -5,6 +5,7 @@ import it21988.User.Owner;
 import it21988.User.User;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 
 import static it21988.House.housesList;
@@ -32,20 +33,26 @@ public class InsertHouse {
 
 
         createHouse();
-
+        housesList.sort(Comparator.comparing(House::houseID));
+        int count=0;
+        for (House house :housesList){
+            System.out.println(count +"\t"+house.houseID());
+            count++;
+        }
     }
 
     private void createHouse(){
         System.out.println("Provide the following info to insert a house.");
         String isApartment=inputBoolean(0);
         final String municipality=inputMunicipality();
-        final String id=setHouseID(municipality);
+        final String[] id=setHouseID(municipality);
         final byte roomsNumber =inputBytes(4);
         final byte pplNumber=inputBytes(5);
         final float comfortLevel= (float) pplNumber/roomsNumber;
-        housesList.add(new House(
+        housesList.add(Math.min(Integer.parseInt(id[1]), housesList.size()),
+                new House(
                 municipality,
-                id,
+                id[0],
                 taxNumber,
                 inputAddress(),
                 roomsNumber,
@@ -79,17 +86,29 @@ public class InsertHouse {
         return municipality;
     }
 
-    private String setHouseID(String municipality) {
-        String id = (municipality.charAt(0)+municipality.charAt(1)+"0000").toUpperCase();
+    private String[] setHouseID(String municipality) {
+
+        String id = (municipality.charAt(0)+""+municipality.charAt(1)+"0000").toUpperCase();
         int counter=0;
-        boolean correct=false;
 
         int index=Collections.binarySearch(housesList, getHouse(id),new HouseCompare());
         System.out.println(index);
-
-
-
-        return id+String.format("%04d",counter);
+        if(index>=0) {
+            while (index<housesList.size()) {
+                if (housesList.get(index).houseID().substring(0, 2).equals(id.substring(0, 2))) {
+                    counter++;
+                } else {
+                    break;              //simplify this if
+                }                       //update sort after add
+                index++;                //or add to specific
+            }                              //housesList.add(index, House)
+            id= id.charAt(0)+""+id.charAt(1)+""+String.format("%04d",counter);
+            System.out.println(id);
+            return new String[]{id, String.valueOf(index+1)};
+        }else {
+            System.out.println(id);
+            return new String[]{id, String.valueOf(0)};
+        }
     }
 
     private String inputAddress(){  //Address can have more than 1 word, also number like 1-3
