@@ -1,16 +1,50 @@
 package it21988.Reservation;
 
+import java.text.ParseException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class Reservation {
-                    //House ID  //0. TaxNumber 1. Start date 2. End date
-    public static Map<String, ArrayList<String[]>> reservations = new HashMap<>();
+
+
+    String houseID;
+    LocalDate startDateBooked;
+    LocalDate endDateBooked;
+    int taxNumber;
+
+    Scanner input;
+    public Reservation(String houseID, LocalDate startDateBooked, LocalDate endDateBooked, int taxNumber) {
+        this.houseID = houseID;
+        this.startDateBooked = startDateBooked;
+        this.endDateBooked = endDateBooked;
+        this.taxNumber = taxNumber;
+
+    }
+    public static List<Reservation> reservationList = new ArrayList<Reservation>();
     public static LocalDate systemTime= LocalDate.now();
 
-    public static  void showAvailableHouses(int taxNumber,LocalDate startDate,LocalDate endDate) {
+    public String getHouseID() {
+        return houseID;
     }
+    public LocalDate getStartDateBooked() {
+        return startDateBooked;
+    }
+
+
+
+    public LocalDate getEndDateBooked() {
+        return endDateBooked;
+    }
+
+
+
+    public int getTaxNumber() {
+        return taxNumber;
+    }
+
+
+
+
 
 }

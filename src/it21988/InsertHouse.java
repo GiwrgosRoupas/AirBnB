@@ -16,9 +16,11 @@ import static it21988.User.User.userExists;
 
 public class InsertHouse {
 
-    Scanner input;
+    static Scanner input;
     int taxNumber;
+    int index;
     InsertHouse(Scanner input){
+
         this.input=input;
         taxNumber= inputTaxNumber();
         if(userExists(taxNumber)) {
@@ -33,7 +35,7 @@ public class InsertHouse {
 
 
         createHouse();
-        housesList.sort(Comparator.comparing(House::houseID));
+        //housesList.sort(Comparator.comparing(House::houseID));
         int count=0;
         for (House house :housesList){
             System.out.println(count +"\t"+house.houseID());
@@ -45,14 +47,14 @@ public class InsertHouse {
         System.out.println("Provide the following info to insert a house.");
         String isApartment=inputBoolean(0);
         final String municipality=inputMunicipality();
-        final String[] id=setHouseID(municipality);
+        final String id=setHouseID(municipality);
         final byte roomsNumber =inputBytes(4);
         final byte pplNumber=inputBytes(5);
         final float comfortLevel= (float) pplNumber/roomsNumber;
-        housesList.add(Math.min(Integer.parseInt(id[1]), housesList.size()),
+        housesList.add(Math.min(index-1, housesList.size()),
                 new House(
                 municipality,
-                id[0],
+                id,
                 taxNumber,
                 inputAddress(),
                 roomsNumber,
@@ -86,29 +88,32 @@ public class InsertHouse {
         return municipality;
     }
 
-    private String[] setHouseID(String municipality) {
+
+
+    private String setHouseID(String municipality) {
 
         String id = (municipality.charAt(0)+""+municipality.charAt(1)+"0000").toUpperCase();
         int counter=0;
 
-        int index=Collections.binarySearch(housesList, getHouse(id),new HouseCompare());
+        index = Collections.binarySearch(housesList, getHouse(id), new HouseCompare());
         System.out.println(index);
         if(index>=0) {
             while (index<housesList.size()) {
-                if (housesList.get(index).houseID().substring(0, 2).equals(id.substring(0, 2))) {
+                if (housesList.get(index).houseID().substring(0, 2).equals(id.substring(0, 2)))
                     counter++;
-                } else {
-                    break;              //simplify this if
-                }                       //update sort after add
-                index++;                //or add to specific
-            }                              //housesList.add(index, House)
+                else {
+                    counter++;
+                    break;
+                }
+                    index++;
+            }
             id= id.charAt(0)+""+id.charAt(1)+""+String.format("%04d",counter);
-            System.out.println(id);
-            return new String[]{id, String.valueOf(index+1)};
+            index++;
         }else {
-            System.out.println(id);
-            return new String[]{id, String.valueOf(0)};
+            index=1;
         }
+
+        return id;
     }
 
     private String inputAddress(){  //Address can have more than 1 word, also number like 1-3
@@ -144,7 +149,7 @@ public class InsertHouse {
     }
 
 
-    private byte inputBytes(int attribute) {   //maybe can be done with generics
+    private  byte inputBytes(int attribute) {   //maybe can be done with generics
         byte num=0;
         boolean correct = false;
         do {
@@ -171,14 +176,14 @@ public class InsertHouse {
                     }
                 } while (!correct);
             } catch (NumberFormatException nfe) {
-                System.out.println("You didnt provide a number");
+                System.out.println("You didnt provide a number or too big number (max. 127).");
             }
         } while (!correct);
 
         return num;
     }
 
-    private int inputInt(int attribute){   //maybe can be done with generics
+    private int inputInt(int attribute){
         int num=0;
         boolean correct =false;
         do {

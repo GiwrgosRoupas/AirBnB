@@ -36,7 +36,7 @@ public record House (String municipality,
         if (house.floor==-5){
             String type="Dedicated";
             System.out.printf("House ID | Municipality   | Adress                | Rooms | People | Comfort | Daily Cost | Internet | TV    | Kitchen | Parking | View     | Nearest Metro  | Garden | Pool | BBQ   | Type%n");
-            System.out.printf("#%s  | %-14s | %-21s | %-5d | %-6d | %-7.2f | %-10d | %-8s | %-3s   | %-7s | %-7s | %-8s | %-14d | %-6d | %-3d  | %-5s | %s%n",
+            System.out.printf("#%s  | %-14s | %-21s | %-5d | %-6d | %-7.2f | %-10d\u20ac | %-8s | %-3s   | %-7s | %-7s | %-8s | %-14d | %-6d | %-3d  | %-5s | %s%n",
                     house.houseID, house.municipality, house.address, house.roomsNumber, house.pplNumber,
                     house.comfortLevel, house.dailyCost, house.hasInternet, house.hasTV, house.hasKitchen, house.hasParking,
                     house.view, house.distanceFromMetro, house.garden, house.pool, house.hasBBQ, type);
@@ -45,7 +45,7 @@ public record House (String municipality,
         }else {
             String type="Apartment";
             System.out.printf("House ID | Municipality   | Adress                | Rooms | People | Comfort | Daily Cost | Internet | TV    | Kitchen | Parking | View     | Nearest Metro  | Floor  | Elevator | Balcony | Type%n");
-            System.out.printf("#%s  | %-14s | %-21s | %-5d | %-6d | %-7.2f | %-10d | %-8s | %-3s   | %-7s | %-7s | %-8s | %-14d | %-6d | %-7s  | %-7s | %s%n",
+            System.out.printf("#%s  | %-14s | %-21s | %-5d | %-6d | %-7.2f | %-10d\u20ac | %-8s | %-3s   | %-7s | %-7s | %-8s | %-14d | %-6d | %-7s  | %-7s | %s%n",
                     house.houseID, house.municipality, house.address, house.roomsNumber, house.pplNumber,
                     house.comfortLevel, house.dailyCost, house.hasInternet, house.hasTV, house.hasKitchen, house.hasParking,
                     house.view, house.distanceFromMetro, house.floor, house.hasElevator, house.hasBalcony, type);
