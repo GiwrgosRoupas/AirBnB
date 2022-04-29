@@ -36,7 +36,7 @@ public class ReservationMenu {
         getNotAvailableHousesByMunicipality(inputMunicipality());
         showAvailableHouses();
         inputMakeReservationOrNot(dates);
-        // Reservation.showAvailableHouses();
+
     }
 
 
@@ -112,19 +112,29 @@ public class ReservationMenu {
 
     private void makeReservation(LocalDate[] dates) {
         int taxNumber=checkUserExists();
-        String houseID=inputHouseID();
+        String houseID=inputHouseID(taxNumber);
+        int cost=0;
+        if (houseID.equals("WW0000"))
+            return;
 
         int counter=0;
         String reservationID=houseID.substring(0,2)+dates[0].getYear();
         for (Reservation reservation : reservationSet){
             if (reservation.getReservationID().substring(0,2).equals(reservationID.substring(0,2))
             && reservation.getStartDateBooked().getYear()==dates[0].getYear()){
+
                 counter++;
             }
         }
         reservationID+=String.format("%05d", counter);
         reservationSet.add(new Reservation(reservationID, houseID, taxNumber, dates[0], dates[1]));
-        System.out.println(reservationID +"  "+ houseID+" "+ taxNumber+" "+ dates[0]+"   "+ dates[1]);
+        for (House house :housesList){
+            if (houseID.equals(house.houseID())){
+                cost=(dates[1].compareTo(dates[0]))*house.dailyCost();
+                break;
+            }
+        }
+        System.out.println("Reservation ID: #"+reservationID +"%nDates reserved "+ dates[0]+" - "+ dates[1]+"%nTotal cost: "+cost +"\u20ac");
 
     };
 
@@ -142,16 +152,22 @@ public class ReservationMenu {
         return taxNumber;
     }
 
-    private String inputHouseID(){
+    private String inputHouseID(int taxNumber){
         boolean correct=false;
         System.out.print("Enter House ID to be booked: ");
         String houseID= null;
+        int houseOwnerTaxNumber=0;
         do{
             houseID=input.nextLine();
             if (houseID.matches("[A-Z]{2}[0-9]{4}")){
                 for (House house :housesList) {
                     if (house.houseID().equals(houseID)){
+                        houseOwnerTaxNumber= house.taxNumber();
                         correct = true;
+                        if (houseOwnerTaxNumber==taxNumber){        //If renter is also owner of the house
+                            System.out.println("You can't rent an apartment you own.");
+                            return "WW0000";
+                        }
                         break;
                     }
                 }

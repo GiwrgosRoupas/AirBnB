@@ -2,6 +2,7 @@ package it21988.Reservation;
 
 //import it21988.HouseCompare;
 
+import it21988.House;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ public class Reservation implements Comparable<Reservation>{
     LocalDate startDateBooked;
     LocalDate endDateBooked;
     int taxNumber;
+    int cost;
 
     Scanner input;
     public Reservation(String reservationID,String houseID, int taxNumber, LocalDate startDateBooked, LocalDate endDateBooked) {
@@ -30,22 +32,16 @@ public class Reservation implements Comparable<Reservation>{
     public static TreeSet<Reservation> reservationSet = new TreeSet<>();
     public static LocalDate systemTime= LocalDate.now();
 
-    public int setReservationID(String houseID){
-        int counter=0;
-        String id=houseID.substring(0,2);
-        for (Reservation reservation : reservationSet){
-            if(reservation.getReservationID().substring(0,2).equals(id)){
-                counter++;
+
+    public int getReservationCost() {
+        int houseDailyCost = 0;
+        for (House house : housesList){
+            if (houseID.equals(house.houseID())){
+                houseDailyCost=house.dailyCost();
+                break;
             }
-
         }
-
-        return 0;
-    }
-
-    public int getReservationCost(String houseID) {
-
-        return 0;
+        return endDateBooked.compareTo(startDateBooked)*houseDailyCost;
     }
 
     public String getReservationID(){

@@ -1,5 +1,6 @@
 package it21988;
 
+import it21988.Reservation.Reservation;
 import it21988.User.User;
 
 import java.util.Scanner;
@@ -7,6 +8,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static it21988.House.housesList;
 import static it21988.House.printHouse;
+import static it21988.Reservation.Reservation.reservationSet;
+import static it21988.it21988.*;
 
 //CHANGE THE PROMPT TO GO BACK WITH 3 NOT X, null string bug
 //provide returns
@@ -18,7 +21,7 @@ import static it21988.House.printHouse;
 //if no house/reservation found provide appropriate message
 public class Log {
     Scanner input;
-    int taxNumber;
+    private final int taxNumber;
     Log(Scanner input){
         this.input = input;
         taxNumber= User.inputTaxNumber();
@@ -33,8 +36,7 @@ public class Log {
                     else if (choice == '2')
                         ownerShowRentedTime();
                 }while (choice!='X');
-            }else if (choice=='2'){
-                  /*Renter Menu*/
+            }else if (choice=='2'){                         /*Renter Menu*/
                 renterShowReservations();
             }
         }while (choice!='X');
@@ -91,7 +93,9 @@ public class Log {
     }
 
     private void ownerShowRentedTime(){
-//        String answer;
+
+
+        //        String answer;
 //        do {
 //        System.out.println("Type a house ID or press enter to see all houses.");
 //        System.out.print("House ID: #");
@@ -101,7 +105,21 @@ public class Log {
 //        }
         }
 
-    private void renterShowReservations(){}
+    private void renterShowReservations(){
+        int totalCost = 0;
+        for (Reservation reservation : reservationSet){
+            if (reservation.getTaxNumber()==taxNumber){
+                System.out.println(ANSI_BLUE+"House ID: #"+ANSI_RESET+
+                        reservation.getHouseID() +
+                        ANSI_GREEN+"\tDates: "+reservation.getStartDateBooked()+ANSI_RESET+
+                        " - "+reservation.getEndDateBooked()+
+                        ANSI_RED+"\tCost: "+ ANSI_RESET+ reservation.getReservationCost());
+                totalCost+= reservation.getReservationCost();
+            }
+        }
+        System.out.println("Total cost: "+ totalCost+"\u20ac");
+
+    }
 
 
     //    Log(){
