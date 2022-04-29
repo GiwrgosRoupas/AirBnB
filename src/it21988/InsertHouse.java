@@ -92,8 +92,8 @@ public class InsertHouse {
 
     private String setHouseID(String municipality) {
 
-        String id = (municipality.charAt(0)+""+municipality.charAt(1)+"0000").toUpperCase();
         int counter=0;
+        String id = (municipality.charAt(0)+""+municipality.charAt(1)+"0000").toUpperCase();
 
         index = Collections.binarySearch(housesList, getHouse(id), new HouseCompare());
         System.out.println(index);

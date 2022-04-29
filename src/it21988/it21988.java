@@ -1,41 +1,51 @@
 package it21988;
 
 import it21988.Reservation.Reservation;
-import it21988.User.User;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Scanner;
 
 import static it21988.House.housesList;
-import static it21988.Reservation.Reservation.reservationList;
+import static it21988.Reservation.Reservation.reservationSet;
+import static it21988.User.Owner.housesOwned;
+import static it21988.User.User.usersMap;
 
 public class it21988 {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
 
         new Initialize();
         Scanner input=new Scanner(System.in);
+        BufferedWriter houseIDFile = new BufferedWriter(new FileWriter("houseIDs.txt"));
+        for (House house: housesList){
+            houseIDFile.write(house.houseID()+"\n");
 
+        }
+        houseIDFile.close();
 
         if(args.length !=0){
-            String id="";
-            String current;
-            int count = 0;
-            for (House house :housesList){
-                    System.out.println(count +"\t"+house.houseID());
-                    count++;
+//
+
+
+            // CHECK IF ALL RESERVATIONS ARE CORRECT DATE-WISE PER HOUSE
+            for (Reservation res :reservationSet){
+                for (Reservation reservation :reservationSet){
+                    if(res.getStartDateBooked().isAfter(reservation.getStartDateBooked())&& res.getEndDateBooked().isBefore(reservation.getEndDateBooked())) {
+                        if(res.getHouseID().equals(reservation.getHouseID())) {
+                            System.out.println("WTF homie");
+                        }
+                    }
+                }
             }
-
-            DateTimeFormatter dtf =DateTimeFormatter.ofPattern("yyyy/MM/dd");
-            LocalDate startDate=LocalDate.parse("2022/08/06",dtf);
-            LocalDate endDate=LocalDate.parse("2022/08/20",dtf);
-            reservationList.add(new Reservation("YO0001", startDate, endDate, 123456789));
-            System.out.println(reservationList.get(0).getStartDateBooked());
-
+        }
+        for (Integer key: housesOwned.keySet()) {
+            housesOwned.get(key).get(0);
         }
 
 
