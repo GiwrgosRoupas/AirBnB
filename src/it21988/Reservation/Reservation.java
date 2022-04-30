@@ -41,11 +41,8 @@ public class Reservation implements Comparable<Reservation>{
 
     public static void replaceReservation(Reservation reservationToEdit, LocalDate[]  newDates){
         Reservation reservationToAdd = new Reservation(reservationToEdit.reservationID, reservationToEdit.houseID, reservationToEdit.taxNumber, newDates[0], newDates[1]);
-
         reservationSet.remove(reservationToEdit);
-
         reservationSet.add(reservationToAdd);
-
 
         ArrayList<Reservation> temp = null;
         boolean found = false;
@@ -66,9 +63,23 @@ public class Reservation implements Comparable<Reservation>{
         temp.remove(reservationToEdit);
         temp.add(new Reservation(reservationToEdit.reservationID, reservationToEdit.houseID, reservationToEdit.taxNumber, newDates[0], newDates[1]));
         housesRented.put(taxNumber, temp);
+    }
 
-
-
+    public static void removeReservation(Reservation reservationToRemove){
+        reservationSet.remove(reservationToRemove);
+        boolean found = false;
+        for (Integer key : housesRented.keySet()){
+            ArrayList<Reservation> temp = housesRented.get(key);
+            for (Reservation reservation : temp){
+                if (reservation.reservationID.equals(reservationToRemove.reservationID))
+                    found=true;
+            }
+            if (found){
+                temp.remove(reservationToRemove);
+                housesRented.put(key, temp);
+                break;
+            }
+        }
     }
     public String getReservationID(){
         return reservationID;

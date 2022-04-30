@@ -90,7 +90,7 @@ public class Log {
 
     private void ownerShowHouses(){
 
-        if (housesOwned.get(taxNumber).isEmpty()) {
+        if (housesOwned.get(taxNumber)==null) {
             System.out.println("No houses found.");
         }else {
             ArrayList<House> temp = housesOwned.get(taxNumber);

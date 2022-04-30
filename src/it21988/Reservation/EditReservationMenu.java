@@ -6,8 +6,7 @@ import java.time.format.ResolverStyle;
 import java.util.Scanner;
 
 import static it21988.Reservation.MakeReservationMenu.setDate;
-import static it21988.Reservation.Reservation.replaceReservation;
-import static it21988.Reservation.Reservation.reservationSet;
+import static it21988.Reservation.Reservation.*;
 
 public class EditReservationMenu {
 
@@ -26,7 +25,7 @@ public class EditReservationMenu {
         do {
             System.out.print("Reservation ID: ");
             reservationID= input.nextLine().trim();
-            for (Reservation reservation : reservationSet) {
+            for (Reservation reservation : reservationSet) {  //Check that reservation is valid
                 if (reservation.getReservationID().equals(reservationID)){
                     reservationToEdit=reservation;
                     correct = true;
@@ -34,7 +33,7 @@ public class EditReservationMenu {
                 }
             }
             if(!correct)
-                System.out.println("Reservation ID must be of format LLYYYYNNNNN (L= letter, YYYY= year of first day, N= number)");
+                System.out.println("Reservation ID must be of format LLYYYYNNNNN (L= letter, YYYY= year of first day, N= number) and exist!");
         }while (!correct);
 
     }
@@ -65,7 +64,7 @@ public class EditReservationMenu {
             newDates= setDate(input);
             datesAreAvailable = checkReservationDatesAreAvailable(reservationToEdit, newDates);
             if (!datesAreAvailable) {
-                System.out.println("Dates not available, try again?");
+                System.out.print("Dates not available, try again? (Y/N)");
                 choice = input.nextLine().trim().toUpperCase();
             }
 
@@ -80,11 +79,8 @@ public class EditReservationMenu {
             if (reservation.getHouseID().equals(reservationToEdit.getHouseID()) && reservation!=reservationToEdit){
                 if (newDates[0].isBefore(reservation.getStartDateBooked()) && newDates[1].isBefore(reservation.getStartDateBooked())
                         || (newDates[0].isAfter(reservation.getEndDateBooked()) && newDates[1].isAfter(reservation.getEndDateBooked())) ){
-                    System.out.println("To ekane true");
                     datesAreAvailable=true;
                 }else {
-                    System.out.println("To ekane false");
-                    datesAreAvailable=false;
                     return false;
                 }
             }
@@ -93,6 +89,7 @@ public class EditReservationMenu {
         return datesAreAvailable;
     }
     private void cancelReservation(){
+        removeReservation(reservationToEdit);
 
     }
 

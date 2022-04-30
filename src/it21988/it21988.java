@@ -1,13 +1,17 @@
 package it21988;
 
 import it21988.Reservation.Reservation;
+import it21988.User.User;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import static it21988.Reservation.Reservation.reservationSet;
 import static it21988.User.Renter.housesRented;
+import static it21988.User.User.usersMap;
 
 public class it21988 {
     public static final String BLACK_BACKGROUND_BRIGHT = "\033[0;100m";// BLACK
@@ -20,28 +24,19 @@ public class it21988 {
     public static final String WHITE_BACKGROUND_BRIGHT = "\033[0;107m";   // WHITE
     public static final String[] colours={"\u001B[0m","\u001B[30m","\u001B[31m","\u001B[32m","\u001B[33m","\u001B[34m","\u001B[35m","\u001B[36m","\u001B[37m"};
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
 
         new Initialize();
         Scanner input=new Scanner(System.in);
-
-        if(args.length !=0){
-//
-
-
-            // CHECK IF ALL RESERVATIONS ARE CORRECT DATE-WISE PER HOUSE
-            for (Reservation res :reservationSet){
-                for (Reservation reservation :reservationSet){
-                    if(res.getStartDateBooked().isAfter(reservation.getStartDateBooked())&& res.getEndDateBooked().isBefore(reservation.getEndDateBooked())) {
-                        if(res.getHouseID().equals(reservation.getHouseID())) {
-                            System.out.println("WTF homie");
-                        }
-                    }
-                }
+        BufferedWriter writer=new BufferedWriter(new FileWriter("renterNames.txt"));
+        for (Integer key : usersMap.keySet()){
+            if (usersMap.get(key)[0].equals(" null")){
+                writer.write(key+"\n");
+                System.out.println(key);
             }
         }
-
+        writer.close();
 
         System.out.println("""
         ######################

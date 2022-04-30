@@ -20,6 +20,8 @@ import static it21988.User.User.userExists;
 public class MakeReservationMenu {
 
     static Scanner input;
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy").withResolverStyle(ResolverStyle.LENIENT);
+
     ArrayList<String> housesNotAvailable;
     public MakeReservationMenu(Scanner input){
         this.input=input;
@@ -92,12 +94,11 @@ public class MakeReservationMenu {
 
     private void inputMakeReservationOrNot(LocalDate[] dates) {
         Byte choice = 0;
-        do{
-            System.out.println("""
-                Press:
-                1. Make reservation
-                2. Previous Menu
-                """);
+        System.out.println("""
+               Press:
+               1. Make reservation
+               2. Previous Menu
+               """);
         try {
             choice = Byte.parseByte(input.nextLine().trim());
             if (choice == 1){
@@ -105,7 +106,7 @@ public class MakeReservationMenu {
             }
         } catch (NumberFormatException nfe) {System.out.println("Wrong input.");}
 
-        }while (choice==1);
+
     }
 
     private void makeReservation(LocalDate[] dates) {
@@ -114,16 +115,21 @@ public class MakeReservationMenu {
         int cost=0;
         if (houseID.equals("WW0000"))
             return;
-
+        String reservationID=null;
         int counter=0;
-        String reservationID=houseID.substring(0,2)+dates[0].getYear();
-        for (Reservation reservation : reservationSet){                 //Sets the reservationID
-            if (reservation.getReservationID().substring(0,2).equals(reservationID.substring(0,2))
-            && reservation.getStartDateBooked().getYear()==dates[0].getYear()){
-                counter++;
+        boolean found;
+        do {
+            found=false;
+            for (Reservation reservation : reservationSet) {                 //Sets the reservationID
+                reservationID = houseID.substring(0, 2) + dates[0].getYear() + String.format("%05d", counter);
+                if (reservation.getReservationID().equals(reservationID)) {
+                    found=true;                                             //if it finds the id it
+                    counter++;                                              //adds one to the end of the id
+                    break;                                                  //and starts again until it doesn't match, not optimized
+                }
             }
-        }
-        reservationID+=String.format("%05d", counter);
+        }while (found);
+
         reservationSet.add(new Reservation(reservationID, houseID, taxNumber, dates[0], dates[1]));
         for (House house :housesList){
             if (houseID.equals(house.houseID())){
@@ -131,7 +137,7 @@ public class MakeReservationMenu {
                 break;
             }
         }
-        System.out.println("Reservation ID: #"+reservationID +"%nDates reserved "+ dates[0]+" - "+ dates[1]+"%nTotal cost: "+cost +"\u20ac");
+        System.out.println("\nReservation ID: #"+reservationID +"\nDates reserved "+ dates[0].format(dtf)+" - "+ dates[1].format(dtf)+"\nTotal cost: "+cost +"\u20ac");
 
     }
 
