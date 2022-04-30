@@ -1,10 +1,8 @@
-package it21988;
+package it21988.House;
 
-import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 
@@ -52,16 +50,5 @@ public record House (String municipality,
             System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         }
     }
-
 }
 
-class HouseCompare implements Comparator<House>{
-    public int compare(House h1, House h2) {
-        return h1.houseID().compareTo(h2.houseID());
-    }
-    public static House getHouse(String id){
-        return new House("", id, 0,"", (byte) 0, (byte) 0, 0,"","","","", "",
-                0, 0, 0, 0, "", (byte) 0, "", "");
-    }
-
-}

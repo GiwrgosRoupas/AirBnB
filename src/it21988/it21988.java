@@ -2,42 +2,29 @@ package it21988;
 
 import it21988.Reservation.Reservation;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
-import static it21988.House.housesList;
 import static it21988.Reservation.Reservation.reservationSet;
-import static it21988.User.Owner.housesOwned;
-import static it21988.User.User.usersMap;
+import static it21988.User.Renter.housesRented;
 
 public class it21988 {
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
+    public static final String BLACK_BACKGROUND_BRIGHT = "\033[0;100m";// BLACK
+    public static final String RED_BACKGROUND_BRIGHT = "\033[0;101m";// RED
+    public static final String GREEN_BACKGROUND_BRIGHT = "\033[0;102m";// GREEN
+    public static final String YELLOW_BACKGROUND_BRIGHT = "\033[0;103m";// YELLOW
+    public static final String BLUE_BACKGROUND_BRIGHT = "\033[0;104m";// BLUE
+    public static final String PURPLE_BACKGROUND_BRIGHT = "\033[0;105m"; // PURPLE
+    public static final String CYAN_BACKGROUND_BRIGHT = "\033[0;106m";  // CYAN
+    public static final String WHITE_BACKGROUND_BRIGHT = "\033[0;107m";   // WHITE
     public static final String[] colours={"\u001B[0m","\u001B[30m","\u001B[31m","\u001B[32m","\u001B[33m","\u001B[34m","\u001B[35m","\u001B[36m","\u001B[37m"};
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
 
         new Initialize();
         Scanner input=new Scanner(System.in);
-        BufferedWriter houseIDFile = new BufferedWriter(new FileWriter("houseIDs.txt"));
-        for (House house: housesList){
-            houseIDFile.write(house.houseID()+"\n");
-
-        }
-        houseIDFile.close();
 
         if(args.length !=0){
 //
@@ -53,9 +40,6 @@ public class it21988 {
                     }
                 }
             }
-        }
-        for (Integer key: housesOwned.keySet()) {
-            housesOwned.get(key).get(0);
         }
 
 

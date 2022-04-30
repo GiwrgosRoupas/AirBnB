@@ -1,15 +1,16 @@
 package it21988;
 
+import it21988.House.House;
 import it21988.Reservation.Reservation;
-import it21988.User.User;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 
-import static it21988.House.housesList;
+import static it21988.House.House.housesList;
 import static it21988.Reservation.Reservation.reservationSet;
-import static it21988.User.Owner.housesOwned;
+import static it21988.User.Owner.addToHousesOwned;
+import static it21988.User.Renter.addToHousesRented;
 import static it21988.User.User.usersMap;
 
 public class Initialize {
@@ -20,9 +21,23 @@ public class Initialize {
         initReservationsFirst();
         initReservationsSecond();
         initReservationsThird();
+        fillHousesOwned();
+        fillHousesRented();
 
     }
 
+
+    private void fillHousesOwned(){
+        for (House house : housesList){
+            addToHousesOwned(house.taxNumber(),house);
+        }
+    }
+
+    private void fillHousesRented(){
+        for (Reservation reservation : reservationSet){
+            addToHousesRented(reservation.getTaxNumber(),reservation);
+        }
+    }
     private void initFullUsers(){       //All owners but not all renters
         usersMap.put(995281809, new String[]{" Beverly Lyons", "EA734201", "Copper Beech Farm 27 24", "-"});
         usersMap.put(873586888, new String[]{" Amanda Block", "QO359804", "Juniper Ridings 26 75", "-"});

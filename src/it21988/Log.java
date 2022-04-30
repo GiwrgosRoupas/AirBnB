@@ -1,15 +1,18 @@
 package it21988;
 
+import it21988.House.House;
 import it21988.Reservation.Reservation;
 import it21988.User.User;
 
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import static it21988.House.housesList;
-import static it21988.House.printHouse;
+import static it21988.House.House.printHouse;
 import static it21988.Reservation.Reservation.reservationSet;
-import static it21988.it21988.*;
+import static it21988.User.Owner.housesOwned;
+import static it21988.User.Renter.housesRented;
+
 
 //CHANGE THE PROMPT TO GO BACK WITH 3 NOT X, null string bug
 //provide returns
@@ -82,100 +85,51 @@ public class Log {
     }
 
     private void ownerShowHouses(){
-        int counter=0;
-        for (House house : housesList){
-            if (house.taxNumber()==taxNumber) {
-                House.printHouse(house);
-                counter++;
+
+        if (housesOwned.get(taxNumber).isEmpty()) {
+            System.out.println("No houses found.");
+        }else {
+            ArrayList<House> temp = housesOwned.get(taxNumber);
+            for (House house : temp) {
+                printHouse(house);
             }
         }
-        if (counter==0) {System.out.println("No houses found.");}
     }
 
-    private void ownerShowRentedTime(){
-
-
-        //        String answer;
-//        do {
-//        System.out.println("Type a house ID or press enter to see all houses.");
-//        System.out.print("House ID: #");
-//        answer=input.nextLine();
-//        if(answer.toUpperCase().trim().matches("[[A-Z]{2}[0-9]{4}")){
-//
-//        }
+    private void ownerShowRentedTime() {
+        System.out.print("Enter house ID: ");
+        String houseId;
+        long totalRentedTime=0;
+        while(!(houseId=input.nextLine()).matches("[A-Z]{2}[0-9]{4}")){
+            System.out.println("House ID must be of format LLNNNN (L= letter, N= number) and exist.");
         }
+        for (Reservation reservation :reservationSet){
+            if (reservation.getHouseID().equals(houseId)){
+                totalRentedTime+= reservation.getStartDateBooked().until(reservation.getEndDateBooked(), ChronoUnit.DAYS);
+            }
+        }
+        System.out.println("Total rented time for #"+houseId+" is "+ totalRentedTime+" days");
+    }
 
     private void renterShowReservations(){
         int totalCost = 0;
-        for (Reservation reservation : reservationSet){
-            if (reservation.getTaxNumber()==taxNumber){
-                System.out.println(ANSI_BLUE+"House ID: #"+ANSI_RESET+
-                        reservation.getHouseID() +
-                        ANSI_GREEN+"\tDates: "+reservation.getStartDateBooked()+ANSI_RESET+
-                        " - "+reservation.getEndDateBooked()+
-                        ANSI_RED+"\tCost: "+ ANSI_RESET+ reservation.getReservationCost());
+        if(!housesRented.containsKey(taxNumber)){
+            System.out.println("No reservations found.");
+        }else if (housesRented.get(taxNumber).isEmpty()){
+            System.out.println("No reservations found.");
+        }else{
+            ArrayList<Reservation> temp = housesRented.get(taxNumber);
+            for(Reservation reservation : temp){
+                System.out.println("Reservation ID: #"+
+                        reservation.getReservationID()
+                        +"\tDates: "+reservation.getStartDateBooked()+
+                        " - "+reservation.getEndDateBooked()
+                        +"\tCost: "+ + reservation.getReservationCost()+"\033[0m");
                 totalCost+= reservation.getReservationCost();
             }
+            System.out.println("Total cost: "+ totalCost+"\u20ac");
         }
-        System.out.println("Total cost: "+ totalCost+"\u20ac");
-
     }
-
-
-    //    Log(){
-//        final int taxNumber=User.inputTaxNumber();
-//        if(enterAsOwner()){
-//            char userMenuChoice;
-//            do {
-//                ownerMenu();
-//            }while ((userMenuChoice = ownerMenuChoice().charAt(0)) != 'X');
-//        }else
-//            renterMenu();
-//    }
-//
-//    private char enterAsOwner(){
-//
-//        String inputString;
-//        char answer= ' ';
-//        do {
-//            System.out.println("To enter as owner press O, to enter as renter press R!");
-//            inputString = input.nextLine();
-//            if (inputString.length() == 1) {
-//                answer = inputString.toUpperCase().charAt(0);
-//                switch (answer) {
-//                    case 'O' -> asOwner=true;
-//                    case 'R' -> return answer;
-//                    case 'X' -> return answer;
-//                    default -> System.out.println("Wrong character!");
-//                }
-//            }
-//            else
-//                System.out.println("Too many arguments!");
-//        } while (!(answer=='O' || answer=='R'));
-//        return asOwner;
-//    }
-//
-//    private String ownerMenuChoice(){
-//        String string;
-//        do{
-//            System.out.println("""
-//                    Press:
-//                        1. To see all your houses
-//                        2. See rented time for a house
-//                        X. Previous Menu
-//                    """);
-//            string=input.nextLine().trim().toUpperCase();
-//        }while(!string.matches("[12X]"));
-//        return string;
-//    }
-//
-//    private void ownerMenu(){
-//        char userMenuChoice =ownerMenuChoice().charAt(0);
-//
-//    }
-//
-//    private void renterMenu(){}
-
 }
 
 

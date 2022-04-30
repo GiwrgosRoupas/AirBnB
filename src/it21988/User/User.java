@@ -34,18 +34,6 @@ public abstract  class User {
         return User.usersMap.containsKey(taxNumber);
     }
 
-//    public static void createUser(int taxNumber, boolean createOwner){
-//
-//        if(createOwner) {
-//            var user = new UserRecord(inputName(), inputIdNum(), inputAddress(), null);
-//            User.usersMap.put(taxNumber,user);
-//        }else {
-//            var user = new UserRecord(inputName(), inputIdNum(),null, inputEmail());
-//            User.usersMap.put(taxNumber,user);
-//        }
-//
-//    }
-
     public static String inputName() {
         System.out.print("Full name: ");
         String name = input.nextLine().trim();
@@ -119,12 +107,4 @@ public abstract  class User {
 
         return email;
     }
-
-//        private void ownerOrRenter() {
-//        boolean isOwner=false;
-//
-//
-//        if(answer=='O')
-//            isOwner=true;
-//    }
 }

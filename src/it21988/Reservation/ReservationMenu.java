@@ -1,19 +1,17 @@
 package it21988.Reservation;
 
-import it21988.House;
+import it21988.House.House;
 import it21988.User.Owner;
 import it21988.User.Renter;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-
 import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static it21988.House.housesList;
+import static it21988.House.House.housesList;
 import static it21988.Reservation.Reservation.reservationSet;
 import static it21988.User.Owner.createOwner;
 import static it21988.User.User.inputTaxNumber;
@@ -136,7 +134,7 @@ public class ReservationMenu {
         }
         System.out.println("Reservation ID: #"+reservationID +"%nDates reserved "+ dates[0]+" - "+ dates[1]+"%nTotal cost: "+cost +"\u20ac");
 
-    };
+    }
 
     private int checkUserExists(){
         int taxNumber=inputTaxNumber();

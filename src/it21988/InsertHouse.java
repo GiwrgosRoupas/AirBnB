@@ -1,15 +1,17 @@
 package it21988;
 
 
+import it21988.House.House;
+import it21988.House.HouseCompare;
 import it21988.User.Owner;
 import it21988.User.User;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Scanner;
 
-import static it21988.House.housesList;
-import static it21988.HouseCompare.getHouse;
+import static it21988.House.House.housesList;
+import static it21988.House.HouseCompare.getHouse;
+import static it21988.User.Owner.addToHousesOwned;
 import static it21988.User.Owner.createOwner;
 import static it21988.User.User.inputTaxNumber;
 import static it21988.User.User.userExists;
@@ -32,10 +34,7 @@ public class InsertHouse {
             System.out.println("Provide the following info to register as Owner.");
             createOwner(taxNumber);
         }
-
-
         createHouse();
-        //housesList.sort(Comparator.comparing(House::houseID));
         int count=0;
         for (House house :housesList){
             System.out.println(count +"\t"+house.houseID());
@@ -74,6 +73,7 @@ public class InsertHouse {
                 isApartment.equals("Yes")? inputBoolean(18) : null,
                 isApartment.equals("Yes")? inputBoolean(19) : null
         ));
+        addToHousesOwned(taxNumber,housesList.get(Math.min(index-1, housesList.size())));
         System.out.println("House with ID #"+id+" inserted. Owner info: "+ User.usersMap.get(taxNumber)[0]+", "+ taxNumber +".");
     }
 
