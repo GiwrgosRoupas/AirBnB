@@ -17,17 +17,17 @@ import static it21988.User.Owner.createOwner;
 import static it21988.User.User.inputTaxNumber;
 import static it21988.User.User.userExists;
 
-public class ReservationMenu {
+public class MakeReservationMenu {
 
-    Scanner input;
+    static Scanner input;
     ArrayList<String> housesNotAvailable;
-    public ReservationMenu(Scanner input){
+    public MakeReservationMenu(Scanner input){
         this.input=input;
         housesNotAvailable= new ArrayList<>();
         int choice=0;
         //inputMakeReservationOrNot();
         housesNotAvailable = new ArrayList<>();
-        LocalDate[] dates=setDate();
+        LocalDate[] dates=setDate(input);
 
         getNotAvailableHousesByDate(dates[0],dates[1]);
         getNotAvailableHousesByPeopleNumber(inputPplNumber(),inputWantsToSeeBigger());
@@ -40,7 +40,7 @@ public class ReservationMenu {
 
 
 
-    private LocalDate[] setDate(){
+    public static LocalDate[] setDate(Scanner input){
 
         LocalDate systemTime= LocalDate.now();
         LocalDate startDate =null, endDate =null;
@@ -117,10 +117,9 @@ public class ReservationMenu {
 
         int counter=0;
         String reservationID=houseID.substring(0,2)+dates[0].getYear();
-        for (Reservation reservation : reservationSet){
+        for (Reservation reservation : reservationSet){                 //Sets the reservationID
             if (reservation.getReservationID().substring(0,2).equals(reservationID.substring(0,2))
             && reservation.getStartDateBooked().getYear()==dates[0].getYear()){
-
                 counter++;
             }
         }

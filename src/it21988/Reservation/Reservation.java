@@ -9,6 +9,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import static it21988.House.House.housesList;
 import static it21988.House.HouseCompare.getHouse;
+import static it21988.User.Renter.housesRented;
 
 
 public class Reservation implements Comparable<Reservation>{
@@ -38,6 +39,37 @@ public class Reservation implements Comparable<Reservation>{
         return startDateBooked.until(endDateBooked, ChronoUnit.DAYS)*houseDailyCost;
     }
 
+    public static void replaceReservation(Reservation reservationToEdit, LocalDate[]  newDates){
+        Reservation reservationToAdd = new Reservation(reservationToEdit.reservationID, reservationToEdit.houseID, reservationToEdit.taxNumber, newDates[0], newDates[1]);
+
+        reservationSet.remove(reservationToEdit);
+
+        reservationSet.add(reservationToAdd);
+
+
+        ArrayList<Reservation> temp = null;
+        boolean found = false;
+        int taxNumber=0;
+        for (Integer key : housesRented.keySet()){
+            for (Reservation reservation: housesRented.get(key)){
+                if (reservation.getReservationID().equals(reservationToEdit.reservationID)){
+                    temp=housesRented.get(key);
+                    found= true;
+                    taxNumber=key;
+                    break;
+                }
+            }
+            if (found)
+                break;
+
+        }
+        temp.remove(reservationToEdit);
+        temp.add(new Reservation(reservationToEdit.reservationID, reservationToEdit.houseID, reservationToEdit.taxNumber, newDates[0], newDates[1]));
+        housesRented.put(taxNumber, temp);
+
+
+
+    }
     public String getReservationID(){
         return reservationID;
     }

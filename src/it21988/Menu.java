@@ -2,7 +2,8 @@ package it21988;
 
 
 
-import it21988.Reservation.ReservationMenu;
+import it21988.Reservation.EditReservationMenu;
+import it21988.Reservation.MakeReservationMenu;
 
 import java.util.Scanner;
 
@@ -47,7 +48,8 @@ public class Menu {
     private void mainMenuChoiceRedirect(byte choice){
         switch (choice) {
             case 1 -> new InsertHouse(input);
-            case 2 -> new ReservationMenu(input);
+            case 2 -> new MakeReservationMenu(input);
+            case 3 -> new EditReservationMenu(input);
             case 4 -> new Log(input);
             case 5 -> exit(0);
         }

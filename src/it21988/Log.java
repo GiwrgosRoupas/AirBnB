@@ -4,6 +4,8 @@ import it21988.House.House;
 import it21988.Reservation.Reservation;
 import it21988.User.User;
 
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -25,6 +27,8 @@ import static it21988.User.Renter.housesRented;
 public class Log {
     Scanner input;
     private final int taxNumber;
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy").withResolverStyle(ResolverStyle.LENIENT);
+
     Log(Scanner input){
         this.input = input;
         taxNumber= User.inputTaxNumber();
@@ -122,8 +126,8 @@ public class Log {
             for(Reservation reservation : temp){
                 System.out.println("Reservation ID: #"+
                         reservation.getReservationID()
-                        +"\tDates: "+reservation.getStartDateBooked()+
-                        " - "+reservation.getEndDateBooked()
+                        +"\tDates: "+reservation.getStartDateBooked().format(dtf)+
+                        " - "+reservation.getEndDateBooked().format(dtf)
                         +"\tCost: "+ + reservation.getReservationCost()+"\033[0m");
                 totalCost+= reservation.getReservationCost();
             }
