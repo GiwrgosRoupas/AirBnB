@@ -3,7 +3,7 @@ package it21988.Reservation;
 
 
 import it21988.House.HouseCompare;
-import org.jetbrains.annotations.NotNull;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -101,7 +101,7 @@ public class Reservation implements Comparable<Reservation>{
     }
 
     @Override
-    public int compareTo(@NotNull Reservation o) {
+    public int compareTo( Reservation o) {
         return o.reservationID.compareTo(reservationID);
     }
 

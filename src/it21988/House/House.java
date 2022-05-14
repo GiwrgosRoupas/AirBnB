@@ -1,6 +1,6 @@
 package it21988.House;
 
-import org.jetbrains.annotations.NotNull;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public record House (String municipality,
 
     public static List<House> housesList = new ArrayList<>();
 
-    public static void printHouse(@NotNull House house){
+    public static void printHouse( House house){
         if (house.floor==-5){
             String type="Dedicated";
             System.out.printf("House ID | Municipality   | Adress                | Rooms | People | Comfort | Daily Cost | Internet | TV    | Kitchen | Parking | View     | Nearest Metro  | Garden | Pool | BBQ   | Type%n");

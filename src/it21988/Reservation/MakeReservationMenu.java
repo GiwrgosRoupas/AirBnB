@@ -4,6 +4,7 @@ import it21988.House.House;
 import it21988.User.Owner;
 import it21988.User.Renter;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
@@ -17,25 +18,29 @@ import static it21988.User.Owner.createOwner;
 import static it21988.User.User.inputTaxNumber;
 import static it21988.User.User.userExists;
 
+
+
+
 public class MakeReservationMenu {
 
+
     static Scanner input;
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy").withResolverStyle(ResolverStyle.LENIENT);
+    static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT);
 
     ArrayList<String> housesNotAvailable;
     public MakeReservationMenu(Scanner input){
         this.input=input;
-        housesNotAvailable= new ArrayList<>();
-        int choice=0;
-        //inputMakeReservationOrNot();
         housesNotAvailable = new ArrayList<>();
         LocalDate[] dates=setDate(input);
 
         getNotAvailableHousesByDate(dates[0],dates[1]);
         getNotAvailableHousesByPeopleNumber(inputPplNumber(),inputWantsToSeeBigger());
         getNotAvailableHousesByMunicipality(inputMunicipality());
-        showAvailableHouses();
-        inputMakeReservationOrNot(dates);
+        int numberOfHouses=showAvailableHouses();
+        if (numberOfHouses>0)
+            inputMakeReservationOrNot(dates);
+        else
+            System.out.println("No houses found with these criteria.");
 
     }
 
@@ -47,12 +52,10 @@ public class MakeReservationMenu {
         LocalDate systemTime= LocalDate.now();
         LocalDate startDate =null, endDate =null;
         String inputStartDate= null, inputEndDate =null;
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy").withResolverStyle(ResolverStyle.LENIENT);
 
         boolean correct=false;
         do {
             correct=true;
-            System.out.println("Dates that don't exist will automatically get shifted accordingly.");
             System.out.print("Provide the dates,\nStart: ");
             try {
                 inputStartDate=input.nextLine();
@@ -60,13 +63,14 @@ public class MakeReservationMenu {
 
                 if (startDate.isEqual(systemTime) || startDate.isBefore(systemTime))        //Checks startDate is>= systemDate
                     throw new IllegalStateException();
+
                 System.out.print("End: ");
 
                 inputEndDate=input.nextLine();
                 endDate= LocalDate.parse(inputEndDate, dtf);
 
                 if (endDate.isEqual(systemTime) || endDate.isBefore(systemTime))
-                    throw new IllegalStateException();
+                    throw new IllegalCurrentDateEqualityException();
 
                 if (ChronoUnit.DAYS.between(startDate,endDate)>15)
                     throw new DatesRangeException();
@@ -74,17 +78,12 @@ public class MakeReservationMenu {
                 if(startDate.isAfter(endDate) || startDate.isEqual(endDate)){
                     throw new IllegalDateEquallityException();
                 }
-            }catch (DateTimeParseException e) {
+
+            }catch (DateTimeParseException ex) {
                 System.out.println("Date format must be DD/MM/YYYY");
                 correct=false;
-            }catch (IllegalStateException e) {
-                System.out.println("Starting date must be at least one day after current date!");
-                correct=false;
-            }catch (DatesRangeException e) {
-                System.out.println("Dates shouldn't be more than 15 days apart.");
-                correct=false;
-            } catch (IllegalDateEquallityException e) {
-                System.out.println("End date must be at least 1 day after starting date.");
+            }catch (IllegalCurrentDateEqualityException | DatesRangeException
+                    | IllegalDateEquallityException  ex) {
                 correct=false;
             }
         }while (!correct);
@@ -181,16 +180,19 @@ public class MakeReservationMenu {
         }while(!correct);
         return houseID;
     }
-    private void showAvailableHouses(){
+    private int showAvailableHouses(){
+        int numberOfHouses=0;
         for (House house : housesList){
             if (!housesNotAvailable.contains(house.houseID())){
                 System.out.println("House ID: #" + house.houseID()+"\nDaily cost: "+house.dailyCost()+"\u20ac\n");
+                numberOfHouses++;
             }
         }
+        return numberOfHouses;
     }
 
     /*
-    * Checks for every house if it not available at specified date,
+    * Checks for every house if it is not available at specified date,
     * if it's not available puts it in the list.
     * */
 
@@ -268,4 +270,5 @@ public class MakeReservationMenu {
 
         return answer.equals("Y") ? true : false;
     }
+
 }
